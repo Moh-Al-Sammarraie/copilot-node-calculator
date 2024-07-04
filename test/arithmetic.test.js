@@ -94,6 +94,40 @@ describe('Arithmetic', function () {
     });
 
 // TODO: Challenge #1
+describe('Subtraction', function () {
+    it('subtracts two positive integers', function (done) {
+        request.get('/arithmetic?operation=subtract&operand1=10&operand2=5')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: 5 });
+                done();
+            });
+    });
+    it('subtracts a positive integer from a smaller one', function (done) {
+        request.get('/arithmetic?operation=subtract&operand1=5&operand2=10')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: -5 });
+                done();
+            });
+    });
+    it('subtracts two negative integers', function (done) {
+        request.get('/arithmetic?operation=subtract&operand1=-10&operand2=-5')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: -5 });
+                done();
+            });
+    });
+    it('subtracts a negative integer from zero', function (done) {
+        request.get('/arithmetic?operation=subtract&operand1=0&operand2=-5')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: 5 });
+                done();
+            });
+    });
+});
  
 
     describe('Multiplication', function () {
@@ -201,6 +235,96 @@ describe('Arithmetic', function () {
                 .expect(200)
                 .end(function (err, res) {
                     expect(res.body).to.eql({ result: null });
+                    done();
+                });
+        });
+    });
+    describe('Power Operation Tests', function () {
+        it('raises a positive integer to the power of another positive integer', function (done) {
+            request.get('/arithmetic?operation=power&operand1=2&operand2=3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 8 }); // 2^3 = 8
+                    done();
+                });
+        });
+
+        it('raises a negative integer to the power of an even integer', function (done) {
+            request.get('/arithmetic?operation=power&operand1=-2&operand2=4')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 16 }); // (-2)^4 = 16
+                    done();
+                });
+        });
+
+        it('raises a negative integer to the power of an odd integer', function (done) {
+            request.get('/arithmetic?operation=power&operand1=-2&operand2=3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: -8 }); // (-2)^3 = -8
+                    done();
+                });
+        });
+
+        it('raises any number to the power of zero', function (done) {
+            request.get('/arithmetic?operation=power&operand1=5&operand2=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 }); // Any number to the power of 0 is 1
+                    done();
+                });
+        });
+
+        it('raises zero to the power of any positive number', function (done) {
+            request.get('/arithmetic?operation=power&operand1=0&operand2=5')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 }); // 0 to the power of any positive number is 0
+                    done();
+                });
+        });
+    });
+
+    describe('Reminder', function () {
+        it('calculates the reminder of two positive integers', function (done) {
+
+            request.get('/arithmetic?operation=reminder&operand1=10&operand2=3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('calculates the reminder of a positive integer and a negative integer', function (done) {
+            request.get('/arithmetic?operation=reminder&operand1=10&operand2=-3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('calculates the reminder of two negative integers', function (done) {
+            request.get('/arithmetic?operation=reminder&operand1=-10&operand2=-3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: -1 });
+                    done();
+                });
+        });
+        it('calculates the reminder of a positive integer and zero', function (done) {
+            request.get('/arithmetic?operation=reminder&operand1=10&operand2=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: null }); // Adjusted expectation to null
+                    done();
+                });
+        });
+        it('calculates the reminder of zero and a positive integer', function (done) {
+            request.get('/arithmetic?operation=reminder&operand1=0&operand2=10')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
                     done();
                 });
         });
